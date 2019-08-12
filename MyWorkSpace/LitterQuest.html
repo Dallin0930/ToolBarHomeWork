@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href=".././resources/css/ext-all.css" />
+    <script type="text/javascript" src=".././adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src=".././ext-all.js"></script>
+    <script type="text/javascript" src="localXHR.js"></script>
+    <title>Env Question</title>
+    <script>
+        var navHandler = function(direction) {
+            var card = Ext.getCmp('cardId').layout;
+            var prev = Ext.getCmp('prev');
+            var next = Ext.getCmp('next');
+            var activeId = card.activeItem.id;
+
+            if (activeId === 'first') {
+                if (direction === 1) {
+                    card.setActiveItem(1);
+                    prev.setDisabled(false);
+                }
+            } else if (activeId === 'second') {
+                var items = Ext.getCmp('question2').items
+                var values = ''
+                for (var i = 1; i < items.length; i++) {
+                    if (items.get(i).checked) {
+                        values += items.get(i).boxLabel + ' '
+                    }
+                }
+                Ext.getCmp('result2Id').setValue(values)
+                if (direction === -1) {
+                    card.setActiveItem(0);
+                    prev.setDisabled(true);
+                } else {
+                    card.setActiveItem(2);
+                    next.setDisabled(true);
+                }
+            } else if (activeId === 'result') {
+                if (direction === -1) {
+                    card.setActiveItem(1);
+                    next.setDisabled(false);
+                }
+            }
+        }
+
+
+        var changeFunc = function(self, newValue) {
+            Ext.getCmp('result1Id').setValue(self.boxLabel)
+        }
+
+
+
+        Ext.onReady(function () {
+            var layout = new Ext.Viewport({
+                layout: 'border',
+                style: 'margin-left:300px;margin-right:300px',
+                items: [
+                    {
+                        region: 'center',
+                        layout: 'card',
+                        id: 'cardId',
+                        activeItem: 0,
+                        height:500,
+                        bbar: [
+                            {
+                                id: 'prev',
+                                text: '上一步',
+                                handler: navHandler.createDelegate(this, [-1]),
+                                disabled: true
+                            },
+                            {
+                                id: 'next',
+                                text: '下一步',
+                                handler: navHandler.createDelegate(this, [1])
+                            }
+                        ],
+                        items: [
+                            {
+                                id: 'first',
+                                labelAlign: 'center',
+                                title:'問卷調查',
+                                items: [
+                                    {
+                                        id: 'question1',
+                                        xtype:'fieldset',
+                                        defaultType: 'radio',
+                                        style:'margin-left:380px;margin-top:20px;',
+                                        width:'600',
+                                        border:'false',
+                                        items: [
+                                            {html: '<h4>1、番茄酱属于以下哪种垃圾?(单选)</h4>', xtype: 'box'},
+                                            {boxLabel: 'A.湿垃圾', name: 'firstQuestion', inputValue: 'A', listeners: {'check': changeFunc}},
+                                            {boxLabel: 'B.干垃圾', name: 'firstQuestion', inputValue: 'B', listeners: {'check': changeFunc}},
+                                            {boxLabel: 'C.有害垃圾', name: 'firstQuestion', inputValue: 'C', listeners: {'check': changeFunc}},
+                                            {boxLabel: 'D.可回收垃圾', name: 'firstQuestion', inputValue: 'D', listeners: {'check': changeFunc}}
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                id: 'second',
+                                labelAlign: 'center',
+                                title:'問卷調查',
+                                items: [
+                                    {
+                                        id: 'question2',
+                                        xtype:'fieldset',
+                                        defaultType: 'checkbox',
+                                        style:'margin-left:380px;margin-top:20px;',
+                                        width:'600',
+                                        border:'false',
+                                        items: [
+                                            {html: '<h4>2、王大叔出门遛狗，請問以下哪个是正确的处理狗粑粑的方法?(多选)</h4>', xtype: 'box'},
+                                            {boxLabel: 'A.把粑粑用废报纸包好带回家處理掉', name: 'a2', inputValue: 'A'},
+                                            {boxLabel: 'B.受污染的报纸按照有害垃圾的標準進行处理', name: 'b2', inputValue: 'B'},
+                                            {boxLabel: 'C.没受污染的报纸按照可回收垃圾处理', name: 'c2', inputValue: 'C'},
+                                            {boxLabel: 'D.受污染的报纸用水浸濕后当湿垃圾处理', name: 'd2', inputValue: 'D'}
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                id: 'result',
+                                items: [
+                                    {
+                                        id: 'formId',
+                                        xtype:'form',
+                                        frame: true,
+                                        title:'最終確認',
+                                        defaults: {
+                                            width: 500
+                                        },
+                                        defaultType: 'textfield',
+                                        items: [
+                                            {
+                                                id: 'result1Id',
+                                                fieldLabel: 'result1',
+                                                name: 'result1',
+                                            },
+                                            {
+                                                id: 'result2Id',
+                                                fieldLabel: 'result2',
+                                                name: 'result2',
+                                            }
+                                        ],
+                                        buttons: [
+                                            {
+                                                text: 'submit',
+                                                listeners: {
+                                                    'click': function (btn, eventObject) {
+                                                        var result1 = Ext.getCmp('formId').form.getValues().result1
+                                                        var result2 = Ext.getCmp('formId').form.getValues().result2
+                                                        if (result1 === '' || result2 === '') {
+                                                            Ext.MessageBox.alert('tips', 'please make your decesion!');
+                                                        } else {
+                                                            Ext.MessageBox.alert('tips', 'Congratulate to you!');
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            })
+        })
+    </script>
+</head>
+<body>
+
+</body>
+</html>

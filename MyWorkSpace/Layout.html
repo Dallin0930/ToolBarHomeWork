@@ -1,0 +1,125 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gbk">
+    <title>08.layout</title>
+    <link rel="stylesheet" type="text/css" href=".././resources/css/ext-all.css" />
+    <script type="text/javascript" src=".././adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src=".././ext-all.js"></script>
+    <script type="text/javascript" src="localXHR.js"></script>
+    <style type="text/css">
+        * {
+            font-size: 12px;
+        }
+    </style>
+    <script type="text/javascript">
+        Ext.onReady(function(){
+            var panel = new Ext.Panel({
+                renderTo: Ext.getBody(),
+                items:[{
+                    layout: 'form',
+                    width: 800,
+                    height: 400,
+                    bodyStyle: 'padding: 10px',
+                    defaultType: 'textfield',
+                    items:[{
+                        fieldLabel: 'first Name',
+                        name: 'first',
+                        // width: '200',    //invalid
+                        allowBlank: false,
+                        anchor:'90% 5%'
+                    },{
+                        fieldLabel: 'last Name',
+                        name: 'last',
+                        width: 600,
+                        anchor: 'right 20%'
+                    },{
+                        fieldLabel: 'Company',
+                        name: 'company',
+                    },{
+                        fieldLabel: 'Email',
+                        name: 'email',
+                    },{
+                        xtype: 'timefield',
+                        fieldLabel: 'Time',
+                        name: 'time',
+                        minValue: '8:00am',
+                        maxValue: '6:00pm'
+                    },
+                        {
+                            xtype: 'compositefield',
+                            fieldLabel: 'Date Range',
+                            msgTarget : 'side',
+                            anchor    : '-20',
+                            defaults: {
+                                flex: 1
+                            },
+                            items: [
+                                {
+                                    xtype     : 'datefield',
+                                    name      : 'startDate',
+                                    fieldLabel: 'Start'
+                                },
+                                {
+                                    xtype     : 'datefield',
+                                    name      : 'endDate',
+                                    fieldLabel: 'End'
+                                }
+                            ]
+                        }]
+                },{
+                    layout: 'column',
+                    title: 'colomnLayout',
+                    width:800,
+                    height: 150,
+                    layoutConfig:{
+                        column: 4
+                    },
+                    xtype: 'panel',
+                    items:[{
+                        title: 'column1',
+                        columnWidth:150,
+                        html: 'hello'
+                    },{
+                        title: 'column2',
+                        columnWidth: .7,
+                        html: 'hello'
+                    },{
+                        title: 'column3',
+                        columnWidth: .3,
+                        html: 'hello'
+                    }]
+                },{
+                    xtype: 'panel',
+                    title: 'HboxLayout',
+                    width: 600,
+                    height: 250,
+                    layout: 'hbox',
+                    layoutConfig: {
+                        align: 'top',
+                        pack: 'start'
+                    },
+                    items:[{
+                        xtype: 'panel',
+                        title: 'box1',
+                        flex: 1,
+                        items :[{
+                            xtype: 'textfield',
+                            layout: 'form',
+                            defaultType: 'textfield',
+                        }]
+                    },{
+                        xtype: 'panel',
+                        title: 'box2',
+                        flex: 3,
+                        html: 'world'
+                    }]
+                }]
+            });
+        });
+    </script>
+</head>
+<body>
+<script type="text/javascript" src="../shared/examples.js"></script>
+</body>
+</html>
+

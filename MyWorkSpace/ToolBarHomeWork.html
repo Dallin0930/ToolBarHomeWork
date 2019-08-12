@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>Tree3</title>
+    <link rel="stylesheet" type="text/css" href=".././resources/css/ext-all.css" />
+    <!-- LIBS -->
+    <script type="text/javascript" src=".././adapter/ext/ext-base.js"></script>
+    <!-- ENDLIBS -->
+    <script type="text/javascript" src=".././ext-all.js"></script>
+    <script>
+        Ext.onReady(function(){
+
+            var reset1 = new Ext.menu.Item({
+                id:'reset-id',
+                text:'reset',
+                listeners:{
+                    'click': function(){
+                        Ext.getCmp('input-id').form.reset()
+                        Ext.MessageBox.alert('Tips','Reset Success!')
+                    }
+                }
+            })
+
+            var input = new Ext.form.TextArea({
+                id:'input-id',
+                width:500,
+                height:300
+            })
+
+            const win = new Ext.Window({
+                title:"Input Table Params", // ????
+                width:400, // ????
+                height:200, // ????
+                layout:"form",// ??
+                minimizable:true, // ???
+                maximizable:true, // ???
+                frame:true,
+                constrain:true, // ???????????,???????????
+                buttonAlign:"center", // ???????
+                modal:true, // ?????????????????
+                resizable:false, // ?????????????TRUE?
+                plain:true,// ???????????
+
+
+                items: new Ext.FormPanel({
+                    items:[{
+                        id: 'row-id',
+                        xtype: 'textfield',
+                        fieldLabel: 'Row',
+                        name:'row'
+                    },{
+                        id:'col-id',
+                        xtype: 'textfield',
+                        fieldLabel:'Column',
+                        name:'column'
+                    }]
+                }),
+                buttons: [{
+                    text: 'create',
+                    listeners: {
+                        'click': function(){
+                        }
+                    }
+                }
+                ]
+            });
+
+
+            // var temp = new Ext.Template(
+            //     '<tr>',
+            //     '<td>{0}</td>',
+            //     '<td>{1}</td>',
+            //     '<td>{2}</td>'
+            //     '</tr>'
+            // );
+            // temp.setApples = function (){
+            //     temp.compile();
+            //     values.valueOf();
+            //     values.tbar.valueOf()
+            // }
+
+
+
+            var panel = new Ext.Panel({
+                title: 'Blog Comment',
+                renderTo:'test',
+                width:500,
+                height:400,
+                tbar:new Ext.Toolbar({
+                    items:[{
+                        text:'Edit',
+                        width:80,
+                        menu: [reset1]
+                    },
+                    '-', {
+                            text:'Insert',
+                            // handler: onButtonClick,
+                            width:80,
+                            listeners:{
+                                'click': function(){
+                                    win.show()
+                                }
+                            }
+                        }
+                    ]
+                }),
+                items:[{
+                    items:[input],
+                    buttons:[{
+                        id:'submit-id',
+                        text:'submit',
+                        listeners:{
+                            'click': function(){
+                                    var progressBar =new Ext.ProgressBar({
+                                        animate:true,
+                                    text:'Submitting...',
+                                    width:300,
+                                })
+                                progressBar.wait({
+                                    duration:3000,
+                                    fn: function(btn,eventObject){
+                                        var inputContext= Ext.getCmp('input-id').getValue()
+                                        if(inputContext == ' '){
+                                            Ext.MessageBox.alert('Tips','Please input your comment!')
+                                        }else {
+                                            Ext.MessageBox.alert('tips','Success!')
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                    }]
+                }]
+            })
+        })
+
+    </script>
+</head>
+<body>
+<div id="test"></div>
+</body>
+</html>

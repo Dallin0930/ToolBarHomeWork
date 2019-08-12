@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>Tree3</title>
+    <link rel="stylesheet" type="text/css" href="../resources/css/ext-all.css" />
+    <!-- LIBS -->
+    <script type="text/javascript" src="../adapter/ext/ext-base.js"></script>
+    <!-- ENDLIBS -->
+    <script type="text/javascript" src="../ext-all.js"></script>
+    <script>
+        Ext.onReady(function() {
+            var apple = new Ext.tree.TreeNode({text: 'apple'});
+            var pear = new Ext.tree.TreeNode({text: 'pear'});
+            var grapes = new Ext.tree.TreeNode({text: 'grapes'});
+            var watermelon = new Ext.tree.TreeNode({text: 'watermelon'});
+
+            var vegetables = new Ext.tree.TreeNode({text: 'vegetables'});
+            var tomato = new Ext.tree.TreeNode({text: 'tomato'});
+
+            Ext.QuickTips.init();
+
+            var root = new Ext.tree.TreeNode({
+                text:'Fruites',
+                checked: true,
+                expanded: true
+            });
+
+            root.appendChild(apple);
+            root.appendChild(pear);
+            root.appendChild(grapes);
+            root.appendChild(watermelon);
+            root.appendChild(vegetables);
+
+            vegetables.appendChild(tomato);
+
+            var tree = new Ext.tree.TreePanel({
+                renderTo: 'test',
+                useArrows: true,
+                autoScroll: true,
+                animate: true,
+                enableDD: true,
+                containerScroll: true,
+                border: false,
+                width: 200,
+                height: 150,
+                root: root
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="test"></div>
+</body>
+</html>

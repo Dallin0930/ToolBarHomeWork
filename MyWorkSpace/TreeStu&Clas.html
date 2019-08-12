@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Tree3</title>
+    <link rel="stylesheet" type="text/css" href=".././resources/css/ext-all.css" />
+    <!-- LIBS -->
+    <script type="text/javascript" src=".././adapter/ext/ext-base.js"></script>
+    <!-- ENDLIBS -->
+    <script type="text/javascript" src=".././ext-all.js"></script>
+
+    <script>
+        Ext.onReady(function () {
+
+            var cla1 = new Ext.tree.TreeNode({ text: 'class1' });
+            var cla2 = new Ext.tree.TreeNode({ text: 'class2' });
+            var klass = new Ext.tree.TreeNode({ text: 'class3' });
+            var stu1 = new Ext.tree.TreeNode({ text: 'stu1' });
+            Ext.QuickTips.init();
+            var root = new Ext.tree.TreeNode({
+                text: 'School',
+                expanded: true
+            });
+            root.appendChild(cla1);
+            root.appendChild(cla2);
+            root.appendChild(klass);
+            klass.appendChild(stu1);
+
+            var selectNode = null;
+
+            const menu = new Ext.menu.Menu({
+                items:[{
+                    id:'addNode',
+                    text: 'ADD'
+                },{
+                    id:'deleteNode',
+                    text:'DELETE'
+                }],
+                listeners:{
+                    'itemClick' : function(item){
+                        const currentNode = item.parentMenu.contextNode;
+                        switch(item.id){
+                            case 'deleteNode':
+                                if(currentNode.childNodes.length === 0){
+                                    currentNode.remove();
+                                }else{
+                                    Ext.MessageBox.alert('tips','dont delete it!')
+                                }
+                                break;
+                            case 'addNode':
+                                selectNode = currentNode;
+                                win.show();
+                        }
+                    }
+                }
+            })
+
+
+            const win = new Ext.Window({
+                title:"add", // 窗口标题
+                width:700, // 窗口宽度
+                height:350, // 窗口高度
+                layout:"form",// 布局
+                minimizable:true, // 最大化
+                maximizable:true, // 最小化
+                frame:true,
+                constrain:true, // 防止窗口超出浏览器窗口,保证不会越过浏览器边界
+                buttonAlign:"center", // 按钮显示的位置
+                modal:true, // 模式窗口，弹出窗口后屏蔽掉其他组建
+                resizable:false, // 是否可以调整窗口大小，默认TRUE。
+                plain:true,// 将窗口变为半透明状态。
+
+                items: new Ext.FormPanel({
+                    items:[{
+                        id: 'name-id',
+                        xtype: 'textfield',
+                        fieldLabel: 'input',
+                        name:'input'
+                    }]
+                }),
+                buttons: [{
+                    text: 'Add',
+                    listeners: {
+                        'click': function (btn, eventObject) {
+                            if (selectNode.leaf === undefined || selectNode.leaf === false) {
+                                if (selectNode.text === 'School') {
+                                    root.appendChild(new Ext.tree.AsyncTreeNode({
+                                        text: Ext.getCmp('name-id').getValue(),
+                                        expanded: true,
+                                        children: [],
+                                        id: Ext.getCmp('name-id').getValue() + '-id'
+                                    }));
+                                } else {
+                                    selectNode.appendChild(new Ext.tree.AsyncTreeNode({
+                                        text: Ext.getCmp('name-id').getValue(),
+                                        leaf: true,
+                                        checked: false,
+                                        id: Ext.getCmp('name-id').getValue() + '-id'
+                                    }))
+                                }
+                            } else {
+                                Ext.Msg.alert('Error', 'Sorry, you select a leaf node');
+                            }
+                        }
+                    }
+                }
+                //     {
+                //     text: 'exit',
+                //     handler: function () {
+                //         win.hide();
+                //     }
+                // }
+                ]
+            });
+
+
+            const layout = new Ext.Viewport({
+                layout: 'border',
+                items: [
+                    {
+                        id: 'student-tree-id',
+                        region: 'west',
+                        xtype: 'treepanel',
+                        collapsible: true,
+                        title: 'management',
+                        width: 500,
+                        height: 400,
+                        autoScroll: true,
+                        // loader: new Ext.tree.TreeLoader(),
+                        root: root,
+                        rootVisible: true,
+                        contextMenu: menu,
+                        listeners: {
+                            'click':function(node,e){
+                                selectNode = node
+                            },
+                            'contextmenu':function(node,e){
+                                node.select();
+                                treeContextMenu = node.getOwnerTree().contextMenu;
+                                treeContextMenu.contextNode = node;
+                                treeContextMenu.showAt(e.getXY());
+                            }
+                        }
+                    },
+                    {
+                        id: 'form-layout-id',
+                        xtype: 'container',
+                        title: 'formLayout',
+                        region: 'center',
+                        items: [
+                            {
+                                xtype: 'form',
+                                height: 250,
+                                frame: true,
+                                title: 'Add Display',
+                                items: [
+                                    {
+                                        xtype: 'textfield',
+                                        id: 'nameId',
+                                        title: 'add Stu&Classs',
+                                        // width:300,
+                                        fieldLabel: 'input',
+                                        name: 'input',
+                                        anchor: '100%'
+                                    }
+                                ],
+                                buttons: [
+                                    {
+                                        text: 'Add',
+                                        listeners: {
+                                            'click': function (btn, eventObject) {
+                                                if (selectNode === null) {
+                                                    Ext.Msg.alert('Error', 'please select node');
+                                                } else if (selectNode.leaf === undefined || selectNode.leaf === false) {
+                                                    // add class
+                                                    if (selectNode.text === 'School') {
+                                                        root.appendChild(new Ext.tree.AsyncTreeNode({
+                                                            text: Ext.getCmp('nameId').getValue(),
+                                                            expanded: true,
+                                                            children: [],
+                                                            checked:false,
+                                                            // id: Ext.getCmp('nameId').getValue() + '-id'
+                                                        }));
+                                                    } else {
+                                                        selectNode.appendChild(new Ext.tree.AsyncTreeNode({
+                                                            text: Ext.getCmp('nameId').getValue(),
+                                                            leaf: true,
+                                                            // checked: false,    默認為真
+                                                            // id: Ext.getCmp('nameId').getValue() + '-id'
+                                                        }))
+                                                    }
+                                                } else {
+                                                    Ext.Msg.alert('Error', 'Sorry, you select a leaf node');
+                                                }
+                                            }
+                                        }
+                                    },
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        region: 'south',
+                        xtype: 'panel',
+                        height: 150
+                    }]
+            });
+
+            const editor = new Ext.tree.TreeEditor(Ext.getCmp('student-tree-id'), {allowBlank: false}, {
+                listeners: {
+                    'complete': function(editor, currVal, origVal) {
+                        Ext.Msg.alert('Modify', 'nodecontext changed from ' + origVal + ' to ' + currVal);
+                    }
+                }
+            })
+             Ext.getCmp('student-tree-id').expandAll();
+        });
+    </script>
+</head>
+
+<body>
+<div id="test"></div>
+</body>
+
+</html>

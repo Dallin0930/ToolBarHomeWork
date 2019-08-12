@@ -1,0 +1,189 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=gbk">
+        <title>08.layout</title>
+        <link rel="stylesheet" type="text/css" href=".././resources/css/ext-all.css" />
+        <script type="text/javascript" src=".././adapter/ext/ext-base.js"></script>
+        <script type="text/javascript" src=".././ext-all.js"></script>
+        <script type="text/javascript" src="localXHR.js"></script>
+        <style type="text/css">
+* {
+    font-size: 12px;
+}
+        </style>
+        <script type="text/javascript">
+        Ext.onReady(function(){
+
+        var navHandler = function(direction){
+
+        var wizard = Ext.getCmp('wizard').layout;
+        var prev = Ext.getCmp('move-prev');
+        var next = Ext.getCmp('move-next');
+        var activeId = wizard.activeItem.id;
+
+        if (activeId == 'card-0') {
+            if (direction == 1) {
+                wizard.setActiveItem(1);
+                prev.setDisabled(false);
+            }
+        } else if (activeId == 'card-1') {
+            if (direction == -1) {
+                wizard.setActiveItem(0);
+                prev.setDisabled(true);
+            } else {
+                wizard.setActiveItem(2);
+                next.setDisabled(true);
+            }
+        } else if (activeId == 'card-2') {
+            if (direction == -1) {
+                wizard.setActiveItem(1);
+                next.setDisabled(false);
+            }
+        }
+    };
+
+    var viewport = new Ext.Viewport({
+        layout:'border',
+        items:[{
+            region: 'west',
+            id: 'wizard',
+            width: 1700,
+            height:500,
+            title: '垃圾分類問卷',
+            layout:'card',
+            activeItem: 0,
+            bodyStyle: 'padding:15px;margin-left:300px',
+            split:true,
+            minSize:300,
+            maxSize:1800,
+            defaults: {
+                border:false
+            },
+            bbar: [{
+                id: 'move-prev',
+                text: '上一步',
+                handler: navHandler.createDelegate(this, [-1]),
+                disabled: true
+            }, '->',{
+                id: 'move-next',
+                text: '下一步',
+                handler: navHandler.createDelegate(this, [1])
+            }],
+            items: [{
+                id: 'card-0',
+                style:'margin-left:200px;margin-top:50px',
+                items: [{
+                    xtype: 'panel',
+                    width:200,
+                    border:false,
+                    html: '<h2>1、番茄醬屬於哪種垃圾？（單選）</h2>'
+                },
+                    {
+                    xtype: 'radio',
+                    name: 'dryLitter',
+                    boxLabel: 'A.乾垃圾',
+                        inputValue:'A',
+
+                },{
+                    xtype: 'radio',
+                    name: 'wetLitter',
+                    boxLabel: 'B.濕垃圾',
+                        inputValue:'B'
+                },{
+                    xtype: 'radio',
+                    name: 'poisonLitter',
+                    boxLabel: 'C.有害垃圾',
+                        inputValue:'C'
+                },{
+                    xtype: 'radio',
+                    name: 'cycleLitter',
+                    boxLabel: 'D.可回收垃圾',
+                        inputValue:'D'
+                }]
+            },{
+                id: 'card-1',
+                style:'margin-left:200px;margin-top:50px',
+                items:[{
+                    xtype: 'panel',
+                    width: 400,
+                    border:false,
+                    html: '<h2>2、王大叔出門遛狗后，哪些是處理狗粑粑的正確做法？（多選）</h2>'
+                },{
+                    xtype: 'checkbox',
+                    name: 'dryLitter',
+                    boxLabel: 'A.把粑粑用紙包好回家用水衝掉'
+                },{
+                    xtype: 'checkbox',
+                    name: 'poisonLitter',
+                    boxLabel: 'B.受汙染的報紙按照有害垃圾處理'
+                },{
+                    xtype: 'checkbox',
+                    name: 'cycleLitter',
+                    boxLabel: 'C.沒受汙染的報紙按照可回收垃圾處理'
+                },{
+                    xtype: 'checkbox',
+                    name: 'wetLitter',
+                    boxLabel: 'D.受汙染的報紙用水浸濕后按濕垃圾處理'
+                }]
+            },{
+                id: 'card-2',
+                items: [{
+                    xtype: 'panel',
+                    title: 'Confirm Submit',
+                    width: 500,
+                    border: false,
+                    items: [{
+                        xtype: 'textfield',
+                        id:'singleText',
+                        name:'singleText',
+                        width:500
+                    },{
+                        xtype: 'textarea',
+                        width:500,
+                        id:'multiText',
+                        name:'multiText',
+                    }]
+                },{
+                   xtype: 'button',
+                   text: 'display',
+                    style: 'margin-top:20px;margin-left:50px',
+                    listeners:{
+                        'click': function(btn,mm){
+                            // Ext.MessageBox.alert('tip','Congratulate to you!')
+                        }
+                    }
+                },
+                {
+                    xtype: 'button',
+                    text: 'submit',
+                    style: 'margin-top:20px;margin-left:450px',
+                    listeners:{
+                        'click': function(btn,mm){
+                            Ext.MessageBox.alert('tip','Congratulate to you!')
+                        }
+                    }
+                }]
+            }]
+        },{
+            region: 'center',
+            split: true,
+            border: true
+        },{
+            region: 'south',
+            split: true,
+            border: true,
+            height:200,
+            minsize: 130,
+            title: 'foot',
+            html:'welcome'
+        }]
+    });
+
+});
+        </script>
+    </head>
+    <body>
+        <script type="text/javascript" src="../shared/examples.js"></script>
+    </body>
+</html>
+

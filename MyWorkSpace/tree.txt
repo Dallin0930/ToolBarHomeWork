@@ -1,0 +1,8 @@
+[
+{text:'apple',leaf:true,checked:true},
+{text: 'bananas',leaf:true,checked:true},
+{text:'pear', leaf: true,checked:true},
+{text:'vegitables', children: [
+  {text:'tomato', leaf: true}
+]}
+]
